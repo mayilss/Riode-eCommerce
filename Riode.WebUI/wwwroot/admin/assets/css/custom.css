@@ -1,0 +1,48 @@
+﻿.table-operations{
+    text-align:right;
+    min-width:34px !important;
+    max-width:34px !important;
+}
+.table-operations i{
+    margin:0;
+}
+
+.table td .image{
+    width: 100px;
+    object-fit: cover;
+}
+.table > thead > tr > th:not(.table-operations){
+    /*text-align: center;*/
+    vertical-align: middle;
+}
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+.table td.cell-sm{
+    width:120px;
+    overflow: hidden;
+}
+.ck-content{
+    min-height: 200px;
+}
+.photo-viewer {
+    width: 200px;
+    height: 100px;
+    background-position: center;
+    background-size: cover;
+    object-fit: cover;
+    cursor: pointer;
+    background-image: url(https://cdn4.vectorstock.com/i/1000x1000/79/43/camera-photo-upload-icon-on-isolated-white-vector-31757943.jpg);
+}
+    .photo-viewer + input[type="file"]{
+        display:none;
+    }
+
+    @media (max-width:1200px) {
+        td .ellipse{
+        max-width: 50px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

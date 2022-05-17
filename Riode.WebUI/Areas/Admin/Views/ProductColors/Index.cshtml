@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ProductColor>
+
+<div class="page-header">
+	<div class="row align-items-end">
+		<div class="col-lg-8">
+			<div class="page-header-title">
+				<div class="d-inline">
+					<h4>Product Colors</h4>
+					<span>
+						The List of all Product Colors
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="page-header-breadcrumb">
+				<ul class="breadcrumb-title">
+					<li class="breadcrumb-item" style="float: left;">
+						<a asp-area="admin" asp-controller="dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+					</li>
+					<li class="breadcrumb-item" style="float: left;">
+						<a href="#!">Product Colors</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-block table-border-style">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Name</th>
+						<th>Hex Code</th>
+						<th class="table-operations">
+							<a asp-action="create" class="btn btn-success"><i class="fa-solid fa-plus"></i></a>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+				   {
+					   <tr>
+						<th scope="row">@item.Id</th>
+						<td>@item.Name</td>
+						<td>
+							<span 
+							style="
+								width: 20px; 
+								height: 20px; 
+								display: inline-block; 
+								background: @item.HexCode;
+								vertical-align: middle;
+								border: 1px solid black;"></span>
+							@item.HexCode
+						</td>
+						<td class="table-operations">
+							<a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa-solid fa-pen"></i></a>
+							<a asp-action="details" asp-route-id="@item.Id" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></a>
+							<a onclick="removeEntity(event, @item.Id)" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+						</td>
+					</tr>
+				   }
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+

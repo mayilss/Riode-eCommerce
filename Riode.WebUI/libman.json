@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "sweetalert@2.1.2",
+      "destination": "wwwroot/admin/assets/libs/sweetalert/"
+    },
+    {
+      "library": "toastr.js@2.1.4",
+      "destination": "wwwroot/admin/assets/libs/toastr.js/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/admin/assets/libs/select2/"
+    },
+    {
+      "library": "jquery-treegrid@0.2.0",
+      "destination": "wwwroot/admin/assets/libs/jquery-treegrid/"
+    },
+    {
+      "library": "ckeditor5@34.0.0",
+      "destination": "wwwroot/admin/assets/libs/ckeditor5/"
+    }
+  ]
+}

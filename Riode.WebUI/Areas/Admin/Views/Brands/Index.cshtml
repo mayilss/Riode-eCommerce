@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Brand>
+
+<div class="page-header">
+	<div class="row align-items-end">
+		<div class="col-lg-8">
+			<div class="page-header-title">
+				<div class="d-inline">
+					<h4>Brands</h4>
+					<span>
+						The List of all brands
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="page-header-breadcrumb">
+				<ul class="breadcrumb-title">
+					<li class="breadcrumb-item" style="float: left;">
+						<a asp-area="admin" asp-controller="dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+					</li>
+					<li class="breadcrumb-item" style="float: left;">
+						<a href="#!">Brands</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-block table-border-style">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Name</th>
+						<th class="table-operations">
+							<a asp-action="create" class="btn btn-success"><i class="fa-solid fa-plus"></i></a>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+				   {
+					   <tr data-entity-id="@item.Id">
+						<th scope="row">@item.Id</th>
+						<td>@item.Name</td>
+						<td class="table-operations">
+							<a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa-solid fa-pen"></i></a>
+							<a asp-action="details" asp-route-id="@item.Id" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></a>
+							<a onclick="removeEntity(event, @item.Id, '@item.Name')" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+						</td>
+					</tr>
+				   }
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+@section js{
+	<script src="~/admin/assets/libs/sweetalert/sweetalert.min.js"></script>
+
+	<script>
+		function removeEntity(event, entityId, name){
+			swal({
+			  title: "Are you sure?",
+			  text: `Once deleted, you will not be able to recover "${name}"!`,
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+			   $.ajax({
+				   url:`@Url.Action("Delete")/${entityId}`,
+				   type: 'post',
+				   success: function(response){
+					   if(response.error == true){
+						toastr["error"](response.message, "Unsuccessful");
+						return;
+					   }
+						toastr["success"](response.message, "Successful");
+						$(`tr[data-entity-id=${entityId}]`).remove();
+				   },
+				   error:function(response){
+					   //console.log(response)
+				   }
+			   });
+			  }
+});
+		}
+	</script>
+}

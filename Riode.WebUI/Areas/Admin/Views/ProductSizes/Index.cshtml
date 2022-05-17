@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Riode.WebUI.Models.Entities.ProductSize>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+
+
+
+
+<!-- Page-header start -->
+<div class="page-header">
+	<div class="row align-items-end">
+		<div class="col-lg-8">
+			<div class="page-header-title">
+				<div class="d-inline">
+					<h4>Product Sizes</h4>
+				</div>
+			</div>
+			<div>
+				<div class="page-header-breadcrumb m-10">
+					<ul class="breadcrumb-title">
+						<li class="breadcrumb-item" style="float: left;">
+							<a asp-action="index" asp-controller="dashboard" asp-area="admin"> <i class="feather icon-home"></i> </a>
+						</li>
+						<li class="breadcrumb-item" style="float: left;">
+							<a href="#!">Product Sizes</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Page-header end -->
+	<!-- Page-body start -->
+	<div class="page-body">
+		@*<p>
+			<a asp-action="Create">Create New</a>
+		</p>*@
+		<!-- Basic table card start -->
+		<div class="card">
+			<div class="card-block table-border-style">
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>
+									@Html.DisplayNameFor(model => model.ShortName)
+								</th>
+								<th>
+									@Html.DisplayNameFor(model => model.Name)
+								</th>
+								<th>
+									<a asp-action="Create">Create New</a>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								<tr>
+									<td>
+										@Html.DisplayFor(modelItem => item.ShortName)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Name)
+									</td>
+									<td>
+										<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+										<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+										<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- Basic table card end -->
+		<!-- Background Utilities table end -->
+	</div>
+	<!-- Page-body end -->

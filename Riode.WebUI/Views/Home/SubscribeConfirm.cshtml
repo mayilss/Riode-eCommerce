@@ -1,0 +1,19 @@
+﻿@model CommandJsonResponse
+@{
+    ViewData["Title"] = "SubscribeConfirm";
+}
+
+@if (Model.Error)
+{
+    <div class="alert alert-danger text-white d-flex justify-content-center">
+        @Model.Message
+    </div>
+}
+else
+{
+    <div class="alert alert-success text-white d-flex justify-content-center" role="alert">
+        @Model.Message <br>
+        <a asp-action="index" asp-controller="home" class="alert-link">Go To Home Page</a>
+    </div>
+}
+

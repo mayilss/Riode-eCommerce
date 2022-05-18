@@ -29,7 +29,10 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         // GET: Admin/Products
         public async Task<IActionResult> Index()
         {
-            var riodeDbContext = _context.Products.Include(p => p.Brand).Include(p => p.Category);
+            var riodeDbContext = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Include(p => p.ProductImages.Where(i=>i.IsMain == true));
             return View(await riodeDbContext.ToListAsync());
         }
 

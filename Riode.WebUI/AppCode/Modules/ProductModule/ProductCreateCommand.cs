@@ -7,6 +7,7 @@ using Riode.WebUI.Models.DataContexts;
 using Riode.WebUI.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -16,10 +17,13 @@ namespace Riode.WebUI.AppCode.Modules.ProductModule
 {
     public class ProductCreateCommand : IRequest<Product>
     {
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string StockKeepingUnit { get; set; }
         public int BrandId { get; set; }
         public int CategoryId { get; set; }
+        [Required]
         public string ShortDescription { get; set; }
         public string Description { get; set; }
         public SpecificationKeyValue[] Specifications { get; set; }

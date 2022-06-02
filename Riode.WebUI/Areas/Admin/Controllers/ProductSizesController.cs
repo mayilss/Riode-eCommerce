@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,12 +22,14 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/ProductSizes
+        [Authorize(Policy = "admin.productsizes.index")]
         public async Task<IActionResult> Index()
         {
             return View(await db.Sizes.ToListAsync());
         }
 
         // GET: Admin/ProductSizes/Details/5
+        [Authorize(Policy = "admin.productsizes.details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,16 +48,15 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/ProductSizes/Create
+        [Authorize(Policy = "admin.productsizes.create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/ProductSizes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.productsizes.create")]
         public async Task<IActionResult> Create([Bind("Id,ShortName,Name")] ProductSize productSize)
         {
             if (ModelState.IsValid)
@@ -67,6 +69,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/ProductSizes/Edit/5
+        [Authorize(Policy = "admin.productsizes.edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,12 +84,10 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             }
             return View(productSize);
         }
-
-        // POST: Admin/ProductSizes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.productsizes.edit")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ShortName,Name")] ProductSize productSize)
         {
             if (id != productSize.Id)
@@ -118,6 +119,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/ProductSizes/Delete/5
+        [Authorize(Policy = "admin.productsizes.delete")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

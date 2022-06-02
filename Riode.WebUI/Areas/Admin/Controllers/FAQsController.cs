@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Riode.WebUI.Models.DataContexts;
 using Riode.WebUI.Models.Entities;
 using System.Linq;
 
 namespace Riode.WebUI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class FAQsController : Controller
     {
         readonly RiodeDbContext db;
@@ -12,21 +14,21 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         {
             this.db = db;
         }
-        [Area("Admin")]
+        [Authorize(Policy = "admin.faqs.index")]
         public IActionResult Index()
         {
             var data = db.Faqs.ToList();
             return View(data);
         }
 
-        [Area("Admin")]
+        [Authorize(Policy = "admin.faqs.create")]
         public IActionResult Create()
         {
             return View();
         }
-        [Area("Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.faqs.create")]
         public IActionResult Create(Faq model)
         {
             if (ModelState.IsValid)
@@ -38,7 +40,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Area("Admin")]
+        [Authorize(Policy = "admin.faqs.edit")]
         public IActionResult Edit(int id)
         {
             var entity = db.Faqs.FirstOrDefault(f => f.Id == id);
@@ -48,9 +50,9 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             }
             return View(entity);
         }
-        [Area("Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.faqs.edit")]
         public IActionResult Edit([FromRoute]int id, Faq model)
         {
             if (id != model.Id)
@@ -67,7 +69,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Area("Admin")]
+        [Authorize(Policy = "admin.faqs.details")]
         public IActionResult Details(int id)
         {
             var entity = db.Faqs.FirstOrDefault(f=>f.Id == id);
@@ -78,7 +80,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             return View(entity);
         }
 
-        [Area("Admin")]
+        [Authorize(Policy = "admin.faqs.delete")]
         public IActionResult Delete(int id)
         {
             var entity = db.Faqs.FirstOrDefault(f => f.Id == id);

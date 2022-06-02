@@ -10,7 +10,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-	<title>Riode - Ultimate eCommerce Template</title>
+	<title>@ViewBag.Title - Riode</title>
 
 	<meta name="keywords" content="HTML5 Template" />
 	<meta name="description" content="Riode - eCommerce Template">
@@ -142,7 +142,7 @@
 								<h4 class="widget-title">My Account</h4>
 								<ul class="widget-body">
 									<li>
-										<a href="~/assets/#">Sign in</a>
+										<a asp-controller="account" asp-action="signin">Sign in</a>
 									</li>
 									<li>
 										<a href="~/assets/cart.html">View Cart</a>

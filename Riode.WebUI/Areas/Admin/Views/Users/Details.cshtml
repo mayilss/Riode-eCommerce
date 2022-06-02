@@ -1,0 +1,188 @@
+﻿@model RiodeUser
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="page-header">
+	<div class="row align-items-end">
+		<div class="col-lg-8">
+			<div class="page-header-title">
+				<div class="d-inline">
+					<h4>Users</h4>
+					<span>
+						Details of a users
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="page-header-breadcrumb">
+				<ul class="breadcrumb-title">
+					<li class="breadcrumb-item" style="float: left;">
+						<a asp-area="admin" asp-controller="dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+					</li>
+					<li class="breadcrumb-item" style="float: left;">
+						<a href="#!">Users</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-block">
+		<div>
+			<div class="form-group row">
+				<label asp-for="Name" class="col-sm-2 col-form-label"></label>
+				<div class="col-sm-10">
+					<p class="form-control">@Model.Name</p>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label asp-for="Surname" class="col-sm-2 col-form-label"></label>
+				<div class="col-sm-10">
+					<p class="form-control">@Model.Surname</p>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label asp-for="UserName" class="col-sm-2 col-form-label"></label>
+				<div class="col-sm-10">
+					<p class="form-control">@Model.UserName</p>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label asp-for="Email" class="col-sm-2 col-form-label"></label>
+				<div class="col-sm-10">
+					<p class="form-control">@Model.Email</p>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-12">
+					<div class="tab-control" role="tabcontrol">
+						<div class="tab-page" id="roles" aria-title="Roles" selected>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th class="table-row-select"></th>
+										<th>Name</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (Tuple<int, string, bool> item in ViewBag.Roles)
+									{
+									<tr>
+										<td class="table-row-select">
+											<input 
+												type="checkbox" 
+												@(item.Item3?"checked":"")
+												data-role-id="@item.Item1"
+												data-user-id="@Model.Id" />
+										</td>
+										<td>@item.Item2</td>
+									</tr>
+											   
+									}
+								</tbody>
+							</table>
+						</div>
+						<div class="tab-page" id="principals" aria-title="Principals">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th class="table-row-select"></th>
+										<th>Name</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (Tuple<string, bool> item in ViewBag.Principals)
+									{
+									<tr>
+										<td class="table-row-select">
+											<input 
+												type="checkbox" 
+												@(item.Item2?"checked":"")
+												data-principal-name="@item.Item1"
+												data-user-id="@Model.Id" />
+										</td>
+										<td>@item.Item1</td>
+									</tr>
+											   
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			<div class="form-group row">
+				<div class="col-12">
+					<a asp-action="edit" asp-route-id="@Model.Id" class="btn btn-warning m-b-0">Edit</a>
+					<a asp-action="index" class="btn btn-primary m-b-0">Go To List</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+@section css{
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/libs/tab-control/tab-control.css">
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/libs/toastr.js/toastr.min.css">
+}
+@section js{
+    <script src="~/admin/assets/libs/tab-control/tab-control.js"></script>
+    <script src="~/admin/assets/libs/toastr.js/toastr.min.js"></script>
+    <script src="~/admin/assets/js/customize.js"></script>
+
+	<script>
+		$(document).ready(function(){
+			$('input[type="checkbox"][data-role-id]').change(function(e){
+				let obj = $(e.currentTarget).data();
+				obj.selected = $(e.currentTarget).is(":checked");
+			
+				$.ajax({
+					url:'@Url.Action("SetRole")',
+					type:'post',
+					data:obj,
+					contentType:'application/x-www-form-urlencoded',
+					dataType:'json',
+					success:function(response){
+						if(response.error == false){
+							toastr.success(response.message,"Succesful!");
+							return;
+						}
+						console.log(response);
+						toastr.error(response.message,"Error!");
+						$(e.currentTarget).prop('checked', !obj.selected);
+					},
+					error:function(response){
+					}
+				});
+			});
+
+			$('input[type="checkbox"][data-principal-name]').change(function(e){
+				let obj = $(e.currentTarget).data();
+				obj.selected = $(e.currentTarget).is(':checked');
+
+				$.ajax({
+					url:'@Url.Action("SetPrincipal")',
+					type:'post',
+					data:obj,
+					contentType:'application/x-www-form-urlencoded',
+					dataType:'json',
+					success:function(response){
+						if(response.error == false){
+							toastr.success(response.message,"Succesful!");
+							return;
+						}
+						console.log(response);
+						toastr.error(response.message,"Error!");
+						$(e.currentTarget).prop('checked', !obj.selected);
+					},
+					error:function(response){
+					}
+				});
+			});
+		});
+	</script>
+}
+

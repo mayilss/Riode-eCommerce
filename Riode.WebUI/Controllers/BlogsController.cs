@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Riode.WebUI.Models.DataContexts;
 using Riode.WebUI.Models.ViewModels;
@@ -14,6 +15,7 @@ namespace Riode.WebUI.Controllers
         {
             this.db = db;
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var data = db.BlogPosts
@@ -21,6 +23,7 @@ namespace Riode.WebUI.Controllers
                 .ToList();
             return View(data);
         }
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
             var post = db.BlogPosts
@@ -50,6 +53,10 @@ namespace Riode.WebUI.Controllers
                                       .ToList();
 
             return View(viewModel);
+        }
+        public IActionResult Comment(int postId, string comment)
+        {
+            return View();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/Products
+        [Authorize(Policy = "admin.products.index")]
         public async Task<IActionResult> Index()
         {
             var riodeDbContext = _context.Products
@@ -37,6 +39,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/Products/Details/5
+        [Authorize(Policy = "admin.products.details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,33 +60,34 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/Products/Create
+        [Authorize(Policy = "admin.products.create")]
         public IActionResult Create()
         {
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Colors"] = new SelectList(_context.Colors, "Id", "Name");
+            ViewData["Sizes"] = new SelectList(_context.Sizes, "Id", "Name");
+            ViewData["Specifications"] = _context.Specifications.Where(s=> s.DeletedById == null).ToList();
             return View();
         }
 
-        // POST: Admin/Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.products.create")]
         public async Task<IActionResult> Create(ProductCreateCommand model)
         {
-            var product = await mediator.Send(model);
+            var response = await mediator.Send(model);
 
-            if (!ModelState.IsValid)
+            if (response?.ValidationResult != null && !response.ValidationResult.IsValid)
             {
-                goto l1;
+                return Json(response.ValidationResult);
             }
-            return Json(new CommandJsonResponse(false, $"Succesful! New products ID is: {product.Id}"));
-            l1:
-            return Json(new CommandJsonResponse(true, ModelState.GetError()));
+            return Json(new CommandJsonResponse(false, $"Succesful! New products ID is: {response.Product.Id}"));
 
         }
 
         // GET: Admin/Products/Edit/5
+        [Authorize(Policy = "admin.products.edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,21 +95,27 @@ namespace Riode.WebUI.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+                .Include(p=>p.ProductImages)
+                .Include(p=>p.Specifications)
+                .Include(p=>p.Pricing).ThenInclude(c=>c.Color)
+                .Include(p=>p.Pricing).ThenInclude(s=>s.Size)
+                .FirstOrDefaultAsync(p=>p.Id == id);
             if (product == null)
             {
                 return NotFound();
             }
+            ViewData["Colors"] = new SelectList(_context.Colors, "Id", "Name");
+            ViewData["Sizes"] = new SelectList(_context.Sizes, "Id", "Name");
+            ViewData["Specifications"] = _context.Specifications.Where(s => s.DeletedById == null).ToList();
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
-        // POST: Admin/Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.products.edit")]
         public async Task<IActionResult> Edit(int id, [Bind("Name,StockKeepingUnit,BrandId,CategoryId,ShortDescription,Description,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] Product product)
         {
             if (id != product.Id)
@@ -139,6 +149,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/Products/Delete/5
+        [Authorize(Policy = "admin.products.delete")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

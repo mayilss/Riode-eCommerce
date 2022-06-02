@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Riode.WebUI.Models.DataContexts;
 using Riode.WebUI.Models.Entities;
 using System.Drawing;
@@ -15,12 +16,14 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             this.db = db;
         }
 
+        [Authorize(Policy = "admin.productcolors.index")]
         public IActionResult Index()
         {
             var data = db.Colors.ToList();
             return View(data);
         }
 
+        [Authorize(Policy = "admin.productcolors.create")]
         public IActionResult Create()
         {
             return View();
@@ -28,6 +31,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.productcolors.create")]
         public IActionResult Create(ProductColor model)
         {
             if (ModelState.IsValid)
@@ -39,6 +43,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "admin.productcolors.edit")]
         public IActionResult Edit([FromRoute] int id)
         {
             var entity = db.Colors.FirstOrDefault(c => c.Id == id);
@@ -51,6 +56,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.productcolors.edit")]
         public IActionResult Edit([FromRoute] int id, ProductColor model)
         {
             if (id != model.Id)
@@ -66,6 +72,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "admin.productcolors.details")]
         public IActionResult Details([FromRoute] int id)
         {
             var entity = db.Colors.FirstOrDefault(c => c.Id == id);
@@ -76,6 +83,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             return View(entity);
         }
 
+        [Authorize(Policy = "admin.productcolors.delete")]
         public IActionResult Delete([FromRoute] int id)
         {
             var entity = db.Colors.FirstOrDefault(c => c.Id == id);

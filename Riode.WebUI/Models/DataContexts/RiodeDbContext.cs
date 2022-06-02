@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Riode.WebUI.Models.Entities;
+using Riode.WebUI.Models.Entities.Membership;
 
 namespace Riode.WebUI.Models.DataContexts
 {
-    public class RiodeDbContext : DbContext
+    public class RiodeDbContext : IdentityDbContext<RiodeUser, RiodeRole, int, RiodeUserClaim, RiodeUserRole, RiodeUserLogin, RiodeRoleClaim, RiodeUserToken>
     {
         public RiodeDbContext(DbContextOptions options)
             : base(options)
@@ -42,6 +44,36 @@ namespace Riode.WebUI.Models.DataContexts
             modelBuilder.Entity<ProductPricing>(e =>
             {
                 e.HasKey(k => new { k.ProductId, k.SizeId, k.ColorId });
+            });
+
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<RiodeUser>(e =>
+            {
+                e.ToTable("Users","Membership");
+            });
+            modelBuilder.Entity<RiodeRole>(e =>
+            {
+                e.ToTable("Roles", "Membership");
+            });
+            modelBuilder.Entity<RiodeUserRole>(e =>
+            {
+                e.ToTable("UserRoles", "Membership");
+            });
+            modelBuilder.Entity<RiodeUserClaim>(e =>
+            {
+                e.ToTable("UserClaims", "Membership");
+            });
+            modelBuilder.Entity<RiodeRoleClaim>(e =>
+            {
+                e.ToTable("RoleClaims", "Membership");
+            });
+            modelBuilder.Entity<RiodeUserLogin>(e =>
+            {
+                e.ToTable("UserLogins", "Membership");
+            });
+            modelBuilder.Entity<RiodeUserToken>(e =>
+            {
+                e.ToTable("UserTokens", "Membership");
             });
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,12 +22,14 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/Specifications
+        [Authorize(Policy = "admin.specifications.index")]
         public async Task<IActionResult> Index()
         {
             return View(await db.Specifications.ToListAsync());
         }
 
         // GET: Admin/Specifications/Details/5
+        [Authorize(Policy = "admin.specifications.details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,6 +48,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/Specifications/Create
+        [Authorize(Policy = "admin.specifications.create")]
         public IActionResult Create()
         {
             return View();
@@ -53,6 +57,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.specifications.create")]
         public async Task<IActionResult> Create([Bind("Name,Id")] Specification specification)
         {
             if (ModelState.IsValid)
@@ -65,6 +70,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/Specifications/Edit/5
+        [Authorize(Policy = "admin.specifications.edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,11 +86,9 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             return View(specification);
         }
 
-        // POST: Admin/Specifications/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.specifications.edit")]
         public async Task<IActionResult> Edit(int id, [Bind("Name,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] Specification specification)
         {
             if (id != specification.Id)
@@ -115,9 +119,9 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             return View(specification);
         }
 
-        [Area("Admin")]
         [HttpPost]
         //[ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.specifications.delete")]
         public IActionResult Delete([FromRoute] int id)
         {
             var entity = db.Specifications.FirstOrDefault(b => b.Id == id);

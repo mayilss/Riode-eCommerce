@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,8 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/BlogPosts
-        public async Task<IActionResult> Index(int pageIndex=1, int pageSize=10)
+        [Authorize(Policy = "admin.blogposts.index")]
+        public IActionResult Index(int pageIndex=1, int pageSize=10)
         {
             var query = db.BlogPosts
                 .Include(b => b.Category)
@@ -57,6 +59,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/BlogPosts/Details/5
+        [Authorize(Policy = "admin.blogposts.details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -76,18 +79,16 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/BlogPosts/Create
+        [Authorize(Policy = "admin.blogposts.create")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(db.Categories, "Id", "Name");
             ViewData["TagId"] = new SelectList(db.PostTags, "Id", "Name");
             return View();
         }
-
-        // POST: Admin/BlogPosts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.blogposts.create")]
         public async Task<IActionResult> Create(BlogPostCreateCommand command)
         {
             var response = await mediator.Send(command);
@@ -101,6 +102,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/BlogPosts/Edit/5
+        [Authorize(Policy = "admin.blogposts.edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -123,6 +125,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.blogposts.edit")]
         public async Task<IActionResult> Edit([FromRoute]int id, BlogPost blogPost, IFormFile file, int[] tagIds)
         {
             if (id != blogPost.Id)
@@ -213,6 +216,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
 
         // POST: Admin/BlogPosts/Delete/5
         [HttpPost]
+        [Authorize(Policy = "admin.blogposts.delete")]
         public async Task<IActionResult> Delete(int id)
         {
             var blogPost = await db.BlogPosts.FirstOrDefaultAsync(bp=>bp.Id== id && bp.DeletedById == null);

@@ -39,7 +39,9 @@
 						<th>Name</th>
 						<th>Parent Name</th>
 						<th class="table-operations">
-							<a asp-action="create" class="btn btn-success"><i class="fa-solid fa-plus"></i></a>
+							@if(User.HasAccess("admin.categories.create")){
+								<a asp-action="create" class="btn btn-success"><i class="fa-solid fa-plus"></i></a>
+							}
 						</th>
 					</tr>
 				</thead>
@@ -51,9 +53,15 @@
 							<td>@item.Name</td>
 							<td>@item.Parent?.Name</td>
 							<td class="table-operations">
+								@if(User.HasAccess("admin.categories.edit")){
 								<a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa-solid fa-pen"></i></a>
+							}
+								@if(User.HasAccess("admin.categories.details")){
 								<a asp-action="details" asp-route-id="@item.Id" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></a>
+							}
+								@if(User.HasAccess("admin.categories.delete")){
 								<a onclick="removeEntity(event, @item.Id, '@item.Name')" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+							}
 							</td>
 						</tr>
 						foreach(var child in item.GetChildren())
@@ -63,9 +71,15 @@
 								<td>@child.Name</td>
 								<td>@child.Parent?.Name</td>
 								<td class="table-operations">
+								@if(User.HasAccess("admin.categories.edit")){
 									<a asp-action="edit" asp-route-id="@child.Id" class="btn btn-warning"><i class="fa-solid fa-pen"></i></a>
+							}
+								@if(User.HasAccess("admin.categories.details")){
 									<a asp-action="details" asp-route-id="@child.Id" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></a>
+							}
+								@if(User.HasAccess("admin.categories.delete")){
 									<a onclick="removeEntity(event, @child.Id, '@child.Name')" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+							}
 								</td>
 							</tr>
 						}

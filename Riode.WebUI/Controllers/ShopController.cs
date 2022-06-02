@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Riode.WebUI.Models.DataContexts;
@@ -14,6 +15,7 @@ namespace Riode.WebUI.Controllers
         {
             this.db = db;
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var model = new ShopIndexViewModel();
@@ -27,6 +29,7 @@ namespace Riode.WebUI.Controllers
                 .ToList();
             return View(model);
         }
+        [AllowAnonymous]
         public IActionResult Details()
         {
             return View();

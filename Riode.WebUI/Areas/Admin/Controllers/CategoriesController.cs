@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Riode.WebUI.Models.DataContexts;
@@ -15,6 +16,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         {
             this.db = db;
         }
+        [Authorize(Policy = "admin.categories.index")]
         public IActionResult Index()
         {
             var data = db.Categories
@@ -23,6 +25,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
                 .ToList();
             return View(data);
         }
+        [Authorize(Policy = "admin.categories.create")]
         public IActionResult Create()
         {
             var categories = db.Categories
@@ -34,6 +37,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.categories.create")]
         public IActionResult Create(Category category)
         {
             if (!ModelState.IsValid)
@@ -50,6 +54,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             db.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Policy = "admin.categories.edit")]
         public IActionResult Edit(int id)
         {
             var entity = db.Categories.FirstOrDefault(c => c.Id == id);
@@ -66,6 +71,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.categories.edit")]
         public IActionResult Edit([FromRoute]int id, Category category)
         {
             if (!ModelState.IsValid)
@@ -96,6 +102,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             ViewBag.Categories = new SelectList(categories, "Id", "Name", category.ParentId, "ParentName");
             return View(category);
         }
+        [Authorize(Policy = "admin.categories.details")]
         public IActionResult Details(int id)
         {
             var entity = db.Categories
@@ -108,6 +115,7 @@ namespace Riode.WebUI.Areas.Admin.Controllers
             return View(entity);
         }
         [HttpPost]
+        [Authorize(Policy = "admin.categories.delete")]
         public IActionResult Delete(int id)
         {
             var entity = db.Categories.FirstOrDefault(b => b.Id == id);

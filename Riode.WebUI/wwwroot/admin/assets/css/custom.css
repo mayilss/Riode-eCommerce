@@ -38,8 +38,14 @@
         display:none;
     }
 
-    @media (max-width:1200px) {
-        td .ellipse{
+td.table-row-select,
+th.table-row-select{
+    width:50px;
+    text-align:center;
+}
+
+@media (max-width:1200px) {
+    td .ellipse{
         max-width: 50px;
         white-space: nowrap;
         overflow: hidden;

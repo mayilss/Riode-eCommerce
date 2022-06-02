@@ -1,0 +1,122 @@
+﻿@model IEnumerable<RiodeUser>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="page-header">
+	<div class="row align-items-end">
+		<div class="col-lg-8">
+			<div class="page-header-title">
+				<div class="d-inline">
+					<h4>Users</h4>
+					<span>
+						The List of all brands
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="page-header-breadcrumb">
+				<ul class="breadcrumb-title">
+					<li class="breadcrumb-item" style="float: left;">
+						<a asp-area="admin" asp-controller="dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+					</li>
+					<li class="breadcrumb-item" style="float: left;">
+						<a href="#!">Users</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-block table-border-style">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Surname</th>
+						<th>Username</th>
+						<th>Email</th>
+						<th>Email Confirmed</th>
+						<th class="table-operations">
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+				   {
+					   <tr data-entity-id="@item.Id">
+						<td scope="row">@item.Name</td>
+						<td scope="row">@item.Surname</td>
+						<td scope="row">@item.UserName</td>
+						<td>@item.Email</td>
+						<td>
+							@if(item.EmailConfirmed)
+							{ 
+								<span class="badge badge-success">Confirmed</span>
+							}
+							else
+							{
+								<span class="badge badge-warning">Pending</span> 
+							}
+						</td>
+						<td class="table-operations">
+							@if(User.HasAccess("admin.users.edit"))
+							{
+								<a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa-solid fa-pen"></i></a>
+							}
+							@if (User.HasAccess("admin.users.details"))
+							{
+								<a asp-action="details" asp-route-id="@item.Id" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></a>
+							}
+							
+							@if (User.HasAccess("admin.users.delete"))
+							{
+								<a onclick="removeEntity(event, @item.Id, '@item.Name')" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+							}
+							</td>
+					</tr>
+				   }
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+@section js{
+	<script src="~/admin/assets/libs/sweetalert/sweetalert.min.js"></script>
+
+	<script>
+		function removeEntity(event, entityId, name){
+			swal({
+			  title: "Are you sure?",
+			  text: `Once deleted, you will not be able to recover "${name}"!`,
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+			   $.ajax({
+				   url:`@Url.Action("Delete")/${entityId}`,
+				   type: 'post',
+				   success: function(response){
+					   if(response.error == true){
+						toastr["error"](response.message, "Unsuccessful");
+						return;
+					   }
+						toastr["success"](response.message, "Successful");
+						$(`tr[data-entity-id=${entityId}]`).remove();
+				   },
+				   error:function(response){
+					   //console.log(response)
+				   }
+			   });
+			  }
+	});
+	}
+	</script>
+}
+

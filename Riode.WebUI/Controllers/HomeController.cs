@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Riode.WebUI.AppCode.Modules.SubscribeModule;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Riode.WebUI.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         readonly IMediator mediator;

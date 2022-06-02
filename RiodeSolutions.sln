@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riode.WebUI", "Riode.WebUI\Riode.WebUI.csproj", "{1B66E1D6-BD66-4BE6-8EDB-004B0CC653FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Riode.WebUI", "Riode.WebUI\Riode.WebUI.csproj", "{1B66E1D6-BD66-4BE6-8EDB-004B0CC653FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riode.Data", "Riode.Data\Riode.Data.csproj", "{827D70B0-4B9A-4A60-8D94-B18FC6312B83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riode.Business", "Riode.Business\Riode.Business.csproj", "{BC1B71DA-CFD0-48EE-A290-EC376059274E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riode.Core", "Riode.Core\Riode.Core.csproj", "{544EAC81-5B16-4B9D-B1C3-50B9913D3E7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riode.WebApi", "Riode.WebApi\Riode.WebApi.csproj", "{83B7F200-825B-4CEA-8493-020300A7062F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{1B66E1D6-BD66-4BE6-8EDB-004B0CC653FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B66E1D6-BD66-4BE6-8EDB-004B0CC653FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B66E1D6-BD66-4BE6-8EDB-004B0CC653FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{827D70B0-4B9A-4A60-8D94-B18FC6312B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{827D70B0-4B9A-4A60-8D94-B18FC6312B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{827D70B0-4B9A-4A60-8D94-B18FC6312B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{827D70B0-4B9A-4A60-8D94-B18FC6312B83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC1B71DA-CFD0-48EE-A290-EC376059274E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1B71DA-CFD0-48EE-A290-EC376059274E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC1B71DA-CFD0-48EE-A290-EC376059274E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC1B71DA-CFD0-48EE-A290-EC376059274E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{544EAC81-5B16-4B9D-B1C3-50B9913D3E7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{544EAC81-5B16-4B9D-B1C3-50B9913D3E7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{544EAC81-5B16-4B9D-B1C3-50B9913D3E7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{544EAC81-5B16-4B9D-B1C3-50B9913D3E7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83B7F200-825B-4CEA-8493-020300A7062F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83B7F200-825B-4CEA-8493-020300A7062F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83B7F200-825B-4CEA-8493-020300A7062F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83B7F200-825B-4CEA-8493-020300A7062F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
